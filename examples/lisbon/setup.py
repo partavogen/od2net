@@ -25,7 +25,7 @@ def makeOSM():
             "osmium",
             "extract",
             "-b",
-            "-9.2945628, 38.6876965, -9.0520177, 38.8417927",
+            "-9.2945628,38.6876965,-9.0520177,38.8417927",
             "input/portugal-latest.osm.pbf",
             "-o",
             "input/input.osm.pbf",

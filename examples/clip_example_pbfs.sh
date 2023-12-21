@@ -22,5 +22,7 @@ clip london  europe/great-britain/england/greater-london-latest.osm.pbf -0.11552
 clip berlin  europe/germany/berlin-latest.osm.pbf                       13.372421,52.496996,13.447781,52.534289
 clip paris   europe/france/ile-de-france-latest.osm.pbf                 2.303867,48.825514,2.387295,48.876571
 clip antwerp europe/belgium-latest.osm.pbf                              4.379425,51.185369,4.463196,51.249238
+clip lisbon europe/portugal-latest.osm.pbf 				-9.2945628,38.6876965,-9.0520177,38.8417927
+
 
 rclone sync pbf_clips/ cloudflare:od2net/pbf_clips/

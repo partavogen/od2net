@@ -1,16 +1,16 @@
 {
     "requests": {
-      "description": "Home to school cycling trips in Lisbon. Randomly created home data (without decay function). School coordinates obtained through Lisboa Aberta open data portal ("https://lisboaaberta.cm-lisboa.pt/index.php/pt/")),
-      "pattern": {
+      "description": "Home to school cycling trips in Lisbon. Randomly created home data (without decay function). School coordinates obtained through Lisboa Aberta open data portal ('https://lisboaaberta.cm-lisboa.pt/index.php/pt/')",
+     "pattern": {
         "BetweenZones": {
           "zones_path": "zones.geojson",
           "csv_path": "od.csv"
         }
       },
-      "origins_path": "origins_path_input_zones.geojson",           # formerly "buildings.geojson"
-      "destinations_path": "destinations_path_input_zones.geojson"  # formerly "buildings.geojson"
+      "origins_path": "origins_path_input_zones.geojson",           
+      "destinations_path": "destinations_path_input_zones.geojson"  
     },
     "cost": "Distance",
-    "uptake": "identity",     # change to GoDutchPCT after running sucessfully with identity parameter
+    "uptake": "identity",    
     "lts": "BikeOttawa"
   }
