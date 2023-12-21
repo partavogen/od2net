@@ -61,6 +61,6 @@ hist(as.numeric(nschool2$to), breaks = length(unique(nschool2$to)))
 ## tidy od up, save od datarframe and R session image
 od <- od[ , -2]
 od <- od[ , c(2, 3, 1)]
-write.csv(od, "od2net/input/od.csv", row.names = FALSE)
+write.csv(od, "od2net/od.csv", row.names = FALSE)
 save.image("od2net/processing/process_data.Rdata")
 
