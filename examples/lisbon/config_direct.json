@@ -3,12 +3,12 @@
       "description": "Home to school cycling trips in Lisbon. Randomly created home data (without decay function). School coordinates obtained through Lisboa Aberta open data portal ('https://lisboaaberta.cm-lisboa.pt/index.php/pt/')",
      "pattern": {
         "BetweenZones": {
-          "zones_path": "zones.geojson",
-          "csv_path": "od.csv"
+          "zones_path": "outside_input/zones.geojson",
+          "csv_path": "outside_input/od.csv"
         }
       },
-      "origins_path": "origins_path_input_zones.geojson",           
-      "destinations_path": "destinations_path_input_zones.geojson"  
+      "origins_path": "outside_input/origins_path_input_zones.geojson",           
+      "destinations_path": "outside_input/destinations_path_input_zones.geojson"  
     },
     "cost": "Distance",
     "uptake": "identity",    
