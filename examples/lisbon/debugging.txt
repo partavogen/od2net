@@ -1,0 +1,6 @@
+guest@rosa-IST:~/Documents/daniel/od2net$ cargo run --release examples/lisbon/config_direct.json
+    Finished release [optimized] target(s) in 0.07s
+     Running `target/release/od2net examples/lisbon/config_direct.json`
+thread 'main' panicked at od2net/src/main.rs:49:21:
+examples/lisbon/config_direct.json is invalid: control character (\u0000-\u001F) found while parsing a string at line 4 column 0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
