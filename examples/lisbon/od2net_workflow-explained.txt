@@ -1,0 +1,185 @@
+################################################## od2net inputs ##################################################
+(MANDATORY) At least two inputs are needed to run od2net: setup.py and config.json. 
+
+		1. config.json        -
+		2. setup.py           - 
+	
+(OPTIONAL) The user can further parametrize simulation runs by creating standalone files called by the config.json 
+           upon runs. The code within these files can be embedded in the mandatory files but it's probably wiser 
+           to separate them for easier alternate run preparation and handling. 
+	
+		3. cost_customization - Cost function customization (added granularity vs config.json options and
+								     corresponding default values)
+		4.                    -
+		5. etc...
+
+################################################## config.json ##################################################
+States input data anatomy and parametrizes simulation methods.
+
+######## SIMPLIFIED ANATOMY 
+- requests - description                
+           - pattern      - BetweenZones   - zones_path         # between zones is one of the pattern options
+             				    - csv_path             
+	   - origins_path                                                   # origins geojson filepath                     
+	   - destinations_path                                              # destinations geojson filepath, can be == origins
+- cost     - Distance
+- uptake   - GoDutchPCT 
+- lts      - BikeOttawa
+
+######## FULL ANATOMY  
+### legend
+CFIG   =  beggining/end; 
+REQS:  =  1st level input (requests abv), comma denotes given requirement root lvl 
+REQS3  =  3rd level input, number denotes nesting lvl relative to CFIG (lvl 0)
+
+### example
+CFIG  {
+REQS:   requests { 	                                               # data files wayfinding 
+REQS2              description: ,                                      ## short simulation scenario description 
+REQS2              pattern: { 				               ## states input data anatomy
+REQS3                         betweenZones: {                          ### using BetweenZones method, 
+REQS3 					      zones_path: ,            ### zones geojson filepath, not needed for some patterns                      
+REQS3 			 		      csv_path: ,              ### O/D matrix filepath, not needed for some patterns   
+REQS3                                       }                          ###
+REQS2     	            },                                         ##
+REQS2              origins_path: ~holds origins filepath~ ,            ## origins geojson filepath
+REQS2              destinations_path: ~holds destinations filepath~ ,  ## destinations geojson filepath, can be equal to origins_path
+REQS1            }                                                     #
+COST:   cost: ,                                                        # cost method chosen
+UPTK:   uptake: ,                                                      # uptake scenario chosen
+LTSM:   lts: ,                                                         # lts method chosen
+CFIG  }  
+
+
+### config options (check repo @ od2net/od2net/src/config.rs) 
+
+pattern:
+
+	 1. "FromEveryOriginToOneDestination"      - Simulates trips between every origin and the the first destination only (destination_path). 
+	 					   ^ USED IN 
+ 	 					   ~ e.g.: "FromEveryOriginToOneDestination"
+	 					   
+[bcR-p]  2. "FromEveryOriginToNearestDestination" - Simulates trips between every origin and the nearest destination (as the crow flies)
+ 	   					   ^ USED IN LONDON EXAMPLE
+ 	   					   # COULD BE USEFUL FOR biclaR-playgrounds
+ 	   					     RUN SIMULATIONS
+ 	 					   ~ e.g.: "From EveryOriginToNearestDestination"
+ 	 					   
+[bcR-p]	 3. "BetweenZones"                         - Simulates trips between two zones according to a given O/D matrix (.csv format)
+						     The O/D matrix must contain 3 columns: "from" denoting the name of given origin area, 
+						     "to" denoting name of given destination area and "count" denoting number of trips with
+						     of that O/D pair.
+						   ^ USED IN EDINBURGH, ENGLAND_2011 EXAMPLES
+						   ~ e.g.: { 
+						   	     BetweenZones { zones_path: path to geojson w/polygons and multipolygons 
+						   					with a "name" property,
+						   			    csv_path: path to .csv with O/D matrix as "from", "to" and "count"
+						   			  } 
+			   			  	   }
+						   			  
+[bcR-p]  4. "ZoneToPoint"                          - Simulates trips between a zone and a exact point. If no point is available within a given
+	 					     zone the algorithm can default to that zone centroid (depending on origin_fallback setting).
+	 					     Differs from BetweenZones because this method uses exact destinations.
+ 					           # COULD BE USEFUL FOR biclaR-playgrounds
+ 					             RUN SIMULATIONS FOR EACH AND EVERY SCHOOL
+	 					   ^ USED IN LIVERPOOL, YORK EXAMPLES
+	  					   ~ e.g.: { 
+						   	     ZoneToPoint { zones_path: path to geojson w/polygons and multipolygons 
+						   					with a "name" property,
+				   					   destinations_path: ,
+						   			   csv_path: path to .csv with O/D matrix as "from", "to" and "count",
+						   			   origin_zone_centroid_fallback: boolean determining zone centroid 
+						   			     				  fallback usage
+						   			 } 
+			   			  	   }
+	  					   
+	 5. "LineStrings" 		     	   - Reads     
+	 					   ^ USED IN SEATTLE EXAMPLE
+	 					   ~ e.g.:
+
+cost:  
+         1. "Distance"          - Finds the most direct path connecting O/D pairs. Equivalent to ByLTS with all weights set to 1.
+         			^ EDINBURGH, ENGLAND_2011, LIVERPOOL (direct), LONDON
+         			~ e.g.: "Distance"
+         			 
+         2. "ByLTS" 	        - Multiplies distances by a factor for each LTS classification. Bigger factors imply bigger cost 
+         			  penalties (mimicking lower willingness to circulate on some road segments vs other lower LTS ones). 
+         			^ USED IN LIVERPOOL (quiet), SEATTLE
+         			~ e.g.: {
+         				  "ByLTS": { "": _,
+         				             "": _,
+         				             "": _,
+         				             "": _,
+         				           }  	
+         				},
+         					 
+         3. "Generalized"       - Simulates cost according to an outer, pre-defined python script (SEE EXAMPLE FURTHER DOWN THIS GUIDE).
+         			^ USED IN YORK EXAMPLE
+         			~ e.g.: {
+         			          "": 
+         			        },
+         			
+         4. "OsmHighwayType"    - Multiplies distance by a factor based on the OSM highway tag. If the type is not present, it 
+         			  won't be allowed at all (read more about OSM highway tags @ openstreetmap.org/wiki/Key:highway). 
+         			^ NOT USED IN ANY EXAMPLE
+         			~ e.g.: { 
+         				  "OsmHighwayType": { "": _,
+         				        "": _,
+         				      } 
+         				},
+         			
+         5. "ExternalCommand"   - Run this command to calculate edge cost.
+         			  REQUIRES ADDITIONAL PYTHON SCRIPT. (check od2net/examples/edinburgh/example_cost.py)	
+         			^ USED IN YORK EXAMPLE
+         			~ e.g.: {
+         			 	  "ExternalCommand"
+         			
+uptake:  
+  
+[bcR-p]  1. "Identity"          -
+	 			^ USED IN ENGLAND_2011, LIVERPOOL, LONDON, SEATTLE AND YORK EXAMPLES
+	 			# COULD BE USEFUL FOR biclaR-playgrounds
+	 			  USE IDENTITY COST TO SIMULATE BASELINE SCENARIO
+	 			~ e.g.:
+	 			 
+[bcR-p]  2. "CutOffMaxDistance" - Simulates trips whose length falls within the specified distance.
+	 			# COULD BE USEFUL FOR biclaR-playgrounds
+	 			  CHILDREN ARE LIMITED TO RELATIVELY SHORT DISTANCES
+	 			^ NOT USED IN ANY EXAMPLE
+	 			~ e.g.:
+	 			  
+[bcR-p]  3. "GovTargetPCT"      - 
+	 			# COULD BE USEFUL FOR biclaR-playgrounds
+	 			  RUN SIMULATIONS FOR ENMAC GOALS AND/OR CURRENT PREDICTED TRAJECTORIES
+	 			^
+	 			~ e.g.:
+	 			  
+[bcR-p]  4. "GoDutchPCT"        - Simulates according
+				# COULD BE USEFUL FOR biclaR-playgrounds
+	 			^ USED IN EDINBURGH EXAMPLE
+	 			~ e.g.:
+	 			  
+lts: 
+	 1. "SpeedLimitOnly"    -
+	 			^ NOT USED IN ANY EXAMPLE
+	 			~ e.g.:
+	 			 
+	 2. "BikeOttawa"        -
+	 			^ USED IN EDINBURGH, ENGLAND_2011, LIVERPOOL, LONDON, SEATTLE
+	 			~ e.g.:
+	 			 
+	 3. "ExternalCommand"   - 
+	 			^ USED IN YORK EXAMPLE
+	 			~ e.g.: {
+	 			  	  "ExternalCommand": "python3 lts.py",
+	 			  	}
+	 			 
+IMPORTANT: Don't forget to close the json dictionary.  	 	     
+      
+################################################## setup.py ##################################################
+
+
+
+
+
+EXAMPLES
