@@ -16,39 +16,47 @@
 ################################################## config.json ##################################################
 States input data anatomy and parametrizes simulation methods.
 
+### legend
+[~~~~] = config starts/ends,
+[DATA] = input data parameters,
+[PRMT] = config parameter, 
+[METH] = method chosen for given parameter, 
+[path] = file path, 
+[    ] = others/ignore
+
 ######## SIMPLIFIED ANATOMY 
-- requests - description                
-           - pattern      - BetweenZones   - zones_path         # between zones is one of the pattern options
+[DATA] requests - description                
+                - pattern      - BetweenZones   - zones_path         # between zones is one of the pattern options
              				    - csv_path             
-	   - origins_path                                                   # origins geojson filepath                     
-	   - destinations_path                                              # destinations geojson filepath, can be == origins
-- cost     - Distance
-- uptake   - GoDutchPCT 
-- lts      - BikeOttawa
+	        - origins_path                                                   # origins geojson filepath                     
+	        - destinations_path                                              # destinations geojson filepath
+[PRMT] cost     - Distance
+[PRMT] uptake   - GoDutchPCT 
+[PRMT] lts      - BikeOttawa
 
 ######## FULL ANATOMY  
 ### legend
-CFIG   =  beggining/end; 
-REQS:  =  1st level input (requests abv), comma denotes given requirement root lvl 
+CFIG   =  beggining/end, 
+REQS:  =  1st level input (requests abv), comma denotes given requirement root lvl, 
 REQS3  =  3rd level input, number denotes nesting lvl relative to CFIG (lvl 0)
 
 ### example
-CFIG  {
-REQS:   requests { 	                                               # data files wayfinding 
-REQS2              description: ,                                      ## short simulation scenario description 
-REQS2              pattern: { 				               ## states input data anatomy
-REQS3                         betweenZones: {                          ### using BetweenZones method, 
-REQS3 					      zones_path: ,            ### zones geojson filepath, not needed for some patterns                      
-REQS3 			 		      csv_path: ,              ### O/D matrix filepath, not needed for some patterns   
-REQS3                                       }                          ###
-REQS2     	            },                                         ##
-REQS2              origins_path: ~holds origins filepath~ ,            ## origins geojson filepath
-REQS2              destinations_path: ~holds destinations filepath~ ,  ## destinations geojson filepath, can be equal to origins_path
-REQS1            }                                                     #
-COST:   cost: ,                                                        # cost method chosen
-UPTK:   uptake: ,                                                      # uptake scenario chosen
-LTSM:   lts: ,                                                         # lts method chosen
-CFIG  }  
+[~~~~]CFIG  {
+[DATA]REQS:   requests { 	                                             # data files wayfinding 
+[    ]REQS2              description: ,                                      ## short simulation scenario description 
+[PRMT]REQS2              pattern: { 				             ## states input data anatomy
+[METH]REQS3                         betweenZones: {                          ### using BetweenZones method, 
+[path]REQS3 					      zones_path: ,          ### zones geojson filepath, not needed for some patterns                      
+[path]REQS3 			 		      csv_path: ,            ### O/D matrix filepath, not needed for some patterns   
+[    ]REQS3                                       }                          ###
+[    ]REQS2     	            },                                       ##
+[path]REQS2              origins_path: ,                                     ## origins geojson filepath
+[path]REQS2              destinations_path: ,                                ## destinations geojson filepath, can be equal to origins_path
+[    ]REQS1            }                                                     #
+[METH]COST:   cost: ,                                                        # cost method chosen
+[METH]UPTK:   uptake: ,                                                      # uptake scenario chosen
+[METH]LTSM:   lts: ,                                                         # lts method chosen
+[~~~~]CFIG  }  
 
 
 ### config options (check repo @ od2net/od2net/src/config.rs) 
@@ -106,14 +114,14 @@ cost:
          			  penalties (mimicking lower willingness to circulate on some road segments vs other lower LTS ones). 
          			^ USED IN LIVERPOOL (quiet), SEATTLE
          			~ e.g.: {
-         				  "ByLTS": { "": _,
-         				             "": _,
-         				             "": _,
-         				             "": _,
+         				  "ByLTS": { "lts1": 1,           # cost is simply distance
+         				             "lts2": 1.5,   	  # cost is 1.5 * distance
+         				             "lts3": 3,		  # cost is 3 * distance
+         				             "lts4": 8,	   	  # cost is 1.5 * distance
          				           }  	
          				},
          					 
-         3. "Generalized"       - Simulates cost according to an outer, pre-defined python script (SEE EXAMPLE FURTHER DOWN THIS GUIDE).
+         3. "Generalized"       - NOT SURE, CORRECT IF WRONG: Simulates cost according to an outer, pre-defined python script (SEE EXAMPLE FURTHER DOWN THIS GUIDE).
          			^ USED IN YORK EXAMPLE
          			~ e.g.: {
          			          "": 
@@ -142,11 +150,11 @@ uptake:
 	 			  USE IDENTITY COST TO SIMULATE BASELINE SCENARIO
 	 			~ e.g.:
 	 			 
-[bcR-p]  2. "CutOffMaxDistance" - Simulates trips whose length falls within the specified distance.
-	 			# COULD BE USEFUL FOR biclaR-playgrounds
-	 			  CHILDREN ARE LIMITED TO RELATIVELY SHORT DISTANCES
-	 			^ NOT USED IN ANY EXAMPLE
-	 			~ e.g.:
+[bcR-p]  2. "CutOffMaxDistanceMeters" - Simulates trips whose length falls within the specified distance.
+	 			        # COULD BE USEFUL FOR biclaR-playgrounds
+	 			          CHILDREN ARE LIMITED TO RELATIVELY SHORT DISTANCES
+	 			        ^ NOT USED IN ANY EXAMPLE
+	 			        ~ e.g.:
 	 			  
 [bcR-p]  3. "GovTargetPCT"      - 
 	 			# COULD BE USEFUL FOR biclaR-playgrounds

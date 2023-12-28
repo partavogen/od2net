@@ -1,0 +1,6 @@
+#1 add example data 
+#1 add lisbon example data, no test run has been made as of this commit
+
+#2 add bash related files
+#2 add bash script for dependencies installation (ubuntu), test run preparation bash logs and preliminary bash script for lisbon example first test run
+
