@@ -1,7 +1,7 @@
 {
   "requests": {
   	        "description": "From every single student adress to the nearest school",
-  	        "pattern": "FromEveryPointToNearestPoint",
+  	        "pattern": "FromEveryOriginToNearestDestination",
   	        "origins_path": "origins_N_OSMHT_I_BO.json",
   	        "destinations_path": "schools_basic.geojson.json"
   	      },

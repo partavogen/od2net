@@ -5,6 +5,7 @@ sys.path.append("..")
 
 from utils import *
 
+import shutil
 
 def makeOSM():
     download(
@@ -24,6 +25,16 @@ def makeOSM():
         ]
     )
 
+
+def moveInputs():
+    src_origins = str(input("Insert the name of your origins file: ")) 
+    src_destinations = str(input("Insert the name of your destinations file: "))
+    dst_origins = r"input/" + src_origins 
+    dst_destinations = r"input/" + src_destinations
+    shutil.move(src_origins, dst_origins)
+    shutil.move(src_destinations, dst_destinations)
+	
+
 #def makeOrigins():
 #    extractCentroids(
 #        pbfInput="input/input.osm.pbf", geojsonOutput="input/#buildings.geojson"
@@ -36,6 +47,7 @@ def makeOSM():
 if __name__ == "__main__":
     run(["mkdir", "-p", "input"])
     makeOSM()
+    moveInputs()
     #makeOrigins()
     #makeDestinations()
 

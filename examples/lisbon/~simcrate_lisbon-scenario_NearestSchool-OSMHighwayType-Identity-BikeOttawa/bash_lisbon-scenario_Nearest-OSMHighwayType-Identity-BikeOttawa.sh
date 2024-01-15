@@ -1,9 +1,10 @@
 # start recording terminal logs
-script  
+script logs_lisbon-scenario_N_OSMHT_I_BO.txt
 
 # run od2net
-cd examples/lisbon/~simcrate_lisbon-scenario1
-
+pwd
+ls
+cd Documents/daniel/od2net/examples/lisbon/~simcrate_lisbon-scenario_NearestSchool-OSMHighwayType-Identity-BikeOttawa
 
 python3 setup_N_OSMHT_I_BO.py
 
