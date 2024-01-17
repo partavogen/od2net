@@ -1,0 +1,23 @@
+{
+    "requests": {
+      "description": "Home to school cycling trips in Lisbon. Randomly created home data (without decay function). School coordinates obtained through Lisboa Aberta open data portal ('https://lisboaaberta.cm-lisboa.pt/index.php/pt/')",
+      "pattern": {
+        "BetweenZones": {
+          "zones_path": "zones.geojson",
+          "csv_path": "od.csv"
+        }
+      },
+      "origins_path": "origins_path_input_zones.geojson",          
+      "destinations_path": "destinations_path_input_zones.geojson"  
+    },
+    "cost": {
+	"ByLTS": {
+	  "lts1": 1.0,
+	  "lts2": 1.5,
+	  "lts3": 3.0,
+	  "lts4": 10.0,
+	}
+    },
+    "uptake": "Identity",    
+    "lts": "BikeOttawa"
+  }

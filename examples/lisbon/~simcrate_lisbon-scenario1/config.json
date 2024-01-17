@@ -1,0 +1,14 @@
+{
+  "requests": {
+  	        "description": "From every single student adress to the nearest school",
+  	        "pattern": "FromEveryPointToNearestPoint",
+  	        "origins_path": "",
+  	        "destinations_path": ""
+  	      },
+  "cost": {
+  	    "ExternalCommand": "python3 cost_lisbon-scenario1.py",
+  	  }
+  "uptake": "GoDutch",
+  "lts": "BikeOttawa"
+}
+			

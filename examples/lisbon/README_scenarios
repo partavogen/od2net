@@ -1,0 +1,14 @@
+-- as of 30/12/2023
+
+### TESTED SCENARIOS
+
+# ~simcrate_lisbon-scenario1 
+In this scenario I aim to simulate the results for the youngest group of students in this study (1st through 6th grade), incurring in stricter LTS, distance and slope requirements. 
+
+
+### UNTESTED
+
+- different input types (zone to point, zone to zone, etc)
+- different cost functions
+- 
+
